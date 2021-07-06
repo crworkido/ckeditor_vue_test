@@ -139,7 +139,7 @@ export default {
            'heading', '|',
         'fontFamily', 'fontsize','fontColor', 'fontBackgroundColor', '|',
         'alignment', 
-        'bold', 'italic', 'strikethrough', 'underline', 'subscript', 'superscript', '|',
+        'bold', 'italic', 'strikethrough', 'underline', 'subscript', 'superscript', 'horizontalLine', '|',
         'link', '|',
         'outdent', 'indent', '|',
         'bulletedList', 'numberedList', 'todoList', '|',
