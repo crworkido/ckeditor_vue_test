@@ -1,40 +1,156 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+    <ckeditor ref="eddy" :editor="editor" v-model="editorData" :config="editorConfig" ></ckeditor>
+
+    <hr/>
+    <button @click="showcode">Show code </button>
+    <hr/>
+    <textarea v-model="editorData" readonly="true"></textarea>
   </div>
 </template>
 
-<script>
+<script> 
+//import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor'
+
+
+import Essentials from "@ckeditor/ckeditor5-essentials/src/essentials";
+//import UploadAdapter from "@ckeditor/ckeditor5-adapter-ckfinder/src/uploadadapter";
+import Alignment from "@ckeditor/ckeditor5-alignment/src/alignment";
+import Autoformat from "@ckeditor/ckeditor5-autoformat/src/autoformat"
+import Bold from "@ckeditor/ckeditor5-basic-styles/src/bold"
+import Base64UploadAdapter from "@ckeditor/ckeditor5-upload/src/adapters/base64uploadadapter";
+import Italic from "@ckeditor/ckeditor5-basic-styles/src/italic";
+import Underline from "@ckeditor/ckeditor5-basic-styles/src/underline";
+import Strikethrough from "@ckeditor/ckeditor5-basic-styles/src/strikethrough";
+//import CKFinder from "@ckeditor/ckeditor5-ckfinder/src/ckfinder";
+import Code from "@ckeditor/ckeditor5-basic-styles/src/code";
+import CodeBlock from "@ckeditor/ckeditor5-code-block/src/codeblock";
+import Font from "@ckeditor/ckeditor5-font/src/font";
+import Subscript from "@ckeditor/ckeditor5-basic-styles/src/subscript";
+import Superscript from "@ckeditor/ckeditor5-basic-styles/src/superscript";
+import Highlight from "@ckeditor/ckeditor5-highlight/src/highlight";
+import Heading from "@ckeditor/ckeditor5-heading/src/heading";
+import HorizontalLine from "@ckeditor/ckeditor5-horizontal-line/src/horizontalline";
+import Image from "@ckeditor/ckeditor5-image/src/image";
+import AutoImage from "@ckeditor/ckeditor5-image/src/autoimage";
+import ImageCaption from "@ckeditor/ckeditor5-image/src/imagecaption";
+import ImageInsert from "@ckeditor/ckeditor5-image/src/imageinsert";
+import ImageStyle from "@ckeditor/ckeditor5-image/src/imagestyle";
+import ImageToolbar from "@ckeditor/ckeditor5-image/src/imagetoolbar";
+//import ImageUpload from "@ckeditor/ckeditor5-image/src/imageupload";
+import ImageResize from "@ckeditor/ckeditor5-image/src/imageresize";
+//import EasyImage from "@ckeditor/ckeditor5-easy-image/src/easyimage";
+import Indent from "@ckeditor/ckeditor5-indent/src/indent";
+import Link from "@ckeditor/ckeditor5-link/src/link";
+import IndentBlock from "@ckeditor/ckeditor5-indent/src/indentblock";
+import List from "@ckeditor/ckeditor5-list/src/list";
+//import MediaEmbed from "@ckeditor/ckeditor5-media-embed/src/mediaembed";
+import Paragraph from "@ckeditor/ckeditor5-paragraph/src/paragraph";
+import PageBreak from "@ckeditor/ckeditor5-page-break/src/pagebreak";
+import PasteFromOffice from "@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice";
+import Title from "@ckeditor/ckeditor5-heading/src/title";
+import Table from "@ckeditor/ckeditor5-table/src/table";
+import TableToolbar from "@ckeditor/ckeditor5-table/src/tabletoolbar";
+import TextTransformation from "@ckeditor/ckeditor5-typing/src/texttransformation";
+import TodoList from "@ckeditor/ckeditor5-list/src/todolist";
+import BlockToolbar from "@ckeditor/ckeditor5-ui/src/toolbar/block/blocktoolbar";
+import HeadingButtonsUI from "@ckeditor/ckeditor5-heading/src/headingbuttonsui";
+import ParagraphButtonUI from "@ckeditor/ckeditor5-paragraph/src/paragraphbuttonui";
+
+
+
+//import FontFamily from '@ckeditor/ckeditor5-font/src/fontfamily.js'
+//import FontSize from '@ckeditor/ckeditor5-font/src/fontsize.js'
 export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  components: {
+//    ckeditor: CKEditor.component
+  }, 
+  methods: {
+    showcode: function() {
+      console.log("show me the code")
+      console.log(this.$refs.eddy)
+    }
+  },
+  data() {
+    return {
+      editor: ClassicEditor,
+      editorData: '<p>That\'s all foolks!  </p>',
+      editorConfig: {
+        plugins: [
+          Alignment,
+          Highlight,
+          Essentials,
+ //         UploadAdapter,
+          Autoformat,
+          Bold,
+          Base64UploadAdapter,
+          Italic,
+          Underline,
+          Strikethrough,
+          Code,
+          CodeBlock,
+          Font,
+          Subscript,
+          Superscript,
+ //         CKFinder,
+          Heading,
+          HorizontalLine,
+//          EasyImage,
+          Image,
+          AutoImage,
+          ImageCaption,
+          ImageInsert,
+          ImageStyle,
+          ImageToolbar,
+//          ImageUpload,
+          ImageResize,
+          Indent,
+          IndentBlock,
+          Link,
+          List,
+//          MediaEmbed,
+          Paragraph,
+          PasteFromOffice,
+          Title,
+//          FileRpository,
+          Table,
+          TableToolbar,
+          TextTransformation,
+          TodoList,
+          BlockToolbar,
+          ParagraphButtonUI,
+          HeadingButtonsUI,
+          PageBreak
+	],
+        fontFamily: {
+          options: [
+            'Arial, sans-serif',
+            'Times',
+            'Courier'
+         ]
+	},
+        toolbar: {
+          items:[
+           'heading', '|',
+        'fontFamily', 'fontsize','fontColor', 'fontBackgroundColor', '|',
+        'alignment', 
+        'bold', 'italic', 'strikethrough', 'underline', 'subscript', 'superscript', '|',
+        'link', '|',
+        'outdent', 'indent', '|',
+        'bulletedList', 'numberedList', 'todoList', '|',
+        'code', 'codeBlock', '|',
+        'insertTable', '|',
+        'image','imageInsert', 'blockQuote', '|',
+        'undo', 'redo' 
+          ]
+	}
+      }
+    }
   }
 }
 </script>
